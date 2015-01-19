@@ -19,7 +19,13 @@ CURTIME=`date +"%Y-%m-%dT%H:%M:%S"`
 PCBTEMP=`/usr/sbin/readtmp | /usr/bin/awk '{print $2}'`
 DISKTEMP=`/usr/sbin/smartctl -A /dev/sda | grep Temperature_Celsius | /usr/bin/awk '{print $10}'`
 FANSPEED=`/usr/sbin/readfanspeed | /usr/bin/awk '{print $3}' | /bin/sed 's/Speed=//g'`
-LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print $1}'`
+LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print 100*$1}'`
+NETSPEEDRX=`sar -n DEV 1 1 | grep eth0 | grep -v '^Average' | /usr/bin/awk '{print $5}'`     
+NETSPEEDTX=`sar -n DEV 1 1 | grep eth0 | grep -v '^Average' | /usr/bin/awk '{print $6}'` 
+LoadCycleCount=`/usr/sbin/smartctl -a /dev/sda4 | grep Load_Cycle_Count | /usr/bin/awk '{print $10}'`
+Power_On_Hours=`/usr/sbin/smartctl -a /dev/sda4 | grep Power_On_Hours | /usr/bin/awk '{print $10}'`
+Power_Cycle_Count=`/usr/sbin/smartctl -a /dev/sda4 | grep Power_Cycle_Count | /usr/bin/awk '{print $10}'`
+
 
 echo $CURTIME $PCBTEMP $DISKTEMP $FANSPEED $LOADAVG >>/tmp/log/yeelink.log
 
@@ -38,7 +44,27 @@ echo '{"timestamp":"'$CURTIME'", "value":'$FANSPEED'}' >/tmp/datafile
 echo '{"timestamp":"'$CURTIME'", "value":'$LOADAVG'}' >/tmp/datafile
 /usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30323/datapoints
 
-sleep 59
+#RX
+echo '{"timestamp":"'$CURTIME'", "value":'$NETSPEEDRX'}' >/tmp/datafile
+/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30388/datapoints
+
+#TX
+echo '{"timestamp":"'$CURTIME'", "value":'$NETSPEEDTX'}' >/tmp/datafile
+/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30387/datapoints
+
+#硬盘启停次数
+echo '{"timestamp":"'$CURTIME'", "value":'$LoadCycleCount'}' >/tmp/datafile
+/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30389/datapoints
+
+#硬盘通电时间
+echo '{"timestamp":"'$CURTIME'", "value":'$Power_On_Hours'}' >/tmp/datafile
+/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30390/datapoints
+
+#硬盘通电次数
+echo '{"timestamp":"'$CURTIME'", "value":'$Power_Cycle_Count'}' >/tmp/datafile
+/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15031/sensor/30391/datapoints
+
+sleep 600
 done
 
 # ==run in router ==
