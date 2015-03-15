@@ -19,8 +19,7 @@ CURTIME=`date +"%Y-%m-%dT%H:%M:%S"`
 PCBTEMP=`/usr/sbin/readtmp | /usr/bin/awk '{print $2}'`
 DISKTEMP=`/usr/sbin/smartctl -A /dev/sda | grep Temperature_Celsius | /usr/bin/awk '{print $10}'`
 FANSPEED=`/usr/sbin/readfanspeed | /usr/bin/awk '{print $3}' | /bin/sed 's/Speed=//g'`
-idle=`vmstat 2 3 | tail -n1 | sed "s/\ \ */\ /g" | cut -d' ' -f 16`
-LOADAVG=100 - idle
+LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print 100*$1}'`
 NETSPEEDRX=`sar -n DEV 1 1 | grep eth0 | grep -v '^Average' | /usr/bin/awk '{print $5}'`     
 NETSPEEDTX=`sar -n DEV 1 1 | grep eth0 | grep -v '^Average' | /usr/bin/awk '{print $6}'` 
 LoadCycleCount=`/usr/sbin/smartctl -a /dev/sda4 | grep Load_Cycle_Count | /usr/bin/awk '{print $10}'`
