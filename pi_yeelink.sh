@@ -3,7 +3,8 @@ sudo python /mnt/tmp/temp.py
 curl --request POST --data-binary @"/mnt/tmp/temp.txt" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15028/sensor/25761/datapoints
 
 CURTIME=`date +"%Y-%m-%d %H:%M:%S"`
-LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print 100*$1}'`
+idle=`vmstat 2 3 | tail -n1 | sed "s/\ \ */\ /g" | cut -d' ' -f 16`
+LOADAVG=$(( 100 - idle ))
 echo '{"timestamp":"'$CURTIME'", "value":'$LOADAVG'}' >/tmp/datafile
 /usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15028/sensor/32478/datapoints
 fi
