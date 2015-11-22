@@ -49,35 +49,53 @@ if [ $PCBTEMP -ge 0 ]
 then
 echo '{"timestamp":"'$CURTIME'", "value":'$PCBTEMP'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30320/datapoints
+
+curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR1','Value':'$PCBTEMP'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 fi
 
 echo '{"timestamp":"'$CURTIME'", "value":'$DISKTEMP'}' >/tmp/datafile	
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30321/datapoints
 
+curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR2','Value':'$DISKTEMP'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
+
 echo '{"timestamp":"'$CURTIME'", "value":'$FANSPEED'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30322/datapoints
 
+curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR3','Value':'$FANSPEED'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
+
 echo '{"timestamp":"'$CURTIME'", "value":'$LOADAVG'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30323/datapoints
+
+curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR4','Value':'$LOADAVG'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 #RX
 echo '{"timestamp":"'$CURTIME'", "value":'$NETSPEEDRX'}' >/tmp/datafile
-curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30388/datapoints
+#curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30388/datapoints
+
+#curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR5','Value':'$NETSPEEDRX'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 
 #TX
 echo '{"timestamp":"'$CURTIME'", "value":'$NETSPEEDTX'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30387/datapoints
 
+#curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR6','Value':'$NETSPEEDTX'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
+
 #硬盘启停次数
 echo '{"timestamp":"'$CURTIME'", "value":'$LoadCycleCount'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30389/datapoints
+
+#curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR7','Value':'$LoadCycleCount'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 
 #硬盘通电时间
 echo '{"timestamp":"'$CURTIME'", "value":'$Power_On_Hours'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30390/datapoints
 
+#curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR8','Value':'$Power_On_Hours'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
+
 #硬盘通电次数
 echo '{"timestamp":"'$CURTIME'", "value":'$Power_Cycle_Count'}' >/tmp/datafile
 curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30391/datapoints
+
+#curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR9','Value':'$Power_Cycle_Count'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 
 sleep 565
 done
