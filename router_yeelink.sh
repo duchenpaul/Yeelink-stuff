@@ -69,7 +69,7 @@ curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff
 curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR4','Value':'$LOADAVG'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 #RX
 echo '{"timestamp":"'$CURTIME'", "value":'$NETSPEEDRX'}' >/tmp/datafile
-#curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30388/datapoints
+curl --request POST --data-binary @"/tmp/datafile" --header "U-ApiKey:86493543ff87c604bc56fac6a89aee56" --verbose http://api.yeelink.net/v1.0/device/15031/sensor/30388/datapoints
 
 #curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/02 --data "[{'Name':'XR5','Value':'$NETSPEEDRX'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 
