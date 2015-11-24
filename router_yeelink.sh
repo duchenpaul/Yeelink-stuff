@@ -32,7 +32,7 @@ post_to_wsncloud() #Usage: post_to_wsncloud sensor_id value
 {
 	sensor_id=$1
 	value=$2
-	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
+	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=`date '+%Y-%m-%d+%H%3A%M%3A%S'`&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
 }
 
 #Time check
