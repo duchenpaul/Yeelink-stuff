@@ -22,6 +22,14 @@ post_to_wsncloud() #Usage: post_to_wsncloud sensor_id value
 	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=` date '+%Y-%m-%d+%H%%3A%M%%3A%S'`&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
 }
 
+post_to_devicehub() #Usage: post_to_devicehub_rpi "[sensor_key]" e.g. 6062/device/f41c2cd1-a05e-462e-b674-4b00b8addc4c/sensor/CPU_Temperature [value]
+{
+	sensor_key=$1
+	value=$2
+	curl -H "X-ApiKey: 94b66098-a1b2-4295-856f-0f2ee4810747" -H "Content-Type: application/json" -i "https://api.devicehub.net/v2/project/$sensor_key/data" -d '{"value":'$value'}'
+}
+
+
 CURTIME=`date +"%Y-%m-%d %H:%M:%S"`
 watch_cpu
 #LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print 100*$1}'`
@@ -37,6 +45,13 @@ curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/01 --
 curl -v --request POST http://www.lewei50.com/api/V1/gateway/UpdateSensors/01 --data "[{'Name':'S2','Value':'$LOADAVG'}]" --header "userkey:2325ed9fb0c94947b18d1a7245a50be4"
 
 sensor_id_cpu_temp=56514e73e4b0932584ded5e5
-post_to_wsncloud $sensor_id_cpu_temp $temp
 sensor_id_cpu_Load=56541041e4b00415c4381c64
+
+post_to_wsncloud $sensor_id_cpu_temp $temp
 post_to_wsncloud $sensor_id_cpu_Load $LOADAVG
+
+sensor_id_CPU_Temperature="6062/device/f41c2cd1-a05e-462e-b674-4b00b8addc4c/sensor/CPU_Temperature"
+sensor_id_CPU_Load="6062/device/f41c2cd1-a05e-462e-b674-4b00b8addc4c/sensor/CPU_Load"
+
+post_to_devicehub $sensor_id_CPU_Temperature $temp
+post_to_devicehub $sensor_id_CPU_Load $LOADAVG
