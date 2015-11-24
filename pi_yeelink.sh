@@ -19,7 +19,7 @@ post_to_wsncloud() #Usage: post_to_wsncloud sensor_id value
 {
 	sensor_id=$1
 	value=$2
-	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
+	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=` date '+%Y-%m-%d+%H%%3A%M%%3A%S'`&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
 }
 
 CURTIME=`date +"%Y-%m-%d %H:%M:%S"`
@@ -27,7 +27,7 @@ watch_cpu
 #LOADAVG=`cat /proc/loadavg | /usr/bin/awk '{print 100*$1}'`
 LOADAVG=$cpu_usage
 echo '{"timestamp":"'$CURTIME'", "value":'$LOADAVG'}' >/tmp/datafile
-/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15028/sensor/32478/datapoints
+#/usr/bin/wget -q --post-file=/tmp/datafile --header="U-ApiKey:86493543ff87c604bc56fac6a89aee56" -O /tmp/yeelink http://api.yeelink.net/v1.0/device/15028/sensor/32478/datapoints
 
 
 temp=`/opt/vc/bin/vcgencmd measure_temp | cut -c 6-7`
