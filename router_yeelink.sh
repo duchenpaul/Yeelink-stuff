@@ -1,4 +1,5 @@
 #!/bin/sh
+#===below:sensor key for wsncloud===
 sensor_id_PCBTEMP=56541aa3e4b00415c4381c6b
 sensor_id_DISKTEMP=56541ac5e4b00415c4381c6c
 sensor_id_FANSPEED=56541af4e4b00415c4381c6d
@@ -6,8 +7,19 @@ sensor_id_LOADAVG=56541b1ce4b00415c4381c6e
 sensor_id_LoadCycleCount=56541b8de4b00415c4381c6f
 sensor_id_Power_On_Hours=56541c2fe4b00415c4381c70
 sensor_id_Power_Cycle_Count=56541c48e4b00415c4381c71
-sensor_id_NETSPEEDRX=
-sensor_id_NETSPEEDTX=
+#sensor_id_NETSPEEDRX=
+#sensor_id_NETSPEEDTX=
+
+#===below:sensor key for devicehub===
+sensor_key_PCBTEMP="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/PBC_Temperature"
+sensor_key_DISKTEMP="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/Disk_Temperature"
+sensor_key_FANSPEED="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/Fan_Speed"
+sensor_key_LOADAVG="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/CPU_Load"
+sensor_key_LoadCycleCount="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/HardDisk_LoadCycleCount"
+sensor_key_Power_On_Hours="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/Power_On_Hours"
+sensor_key_Power_Cycle_Count="6062/device/6210d047-846e-42c8-8366-6d0da7275666/sensor/Power_Cycle_Count"
+#sensor_key_NETSPEEDRX=
+#sensor_key_NETSPEEDTX=
 
 
 
@@ -33,6 +45,13 @@ post_to_wsncloud() #Usage: post_to_wsncloud sensor_id value
 	sensor_id=$1
 	value=$2
 	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=`date '+%Y-%m-%d+%H%3A%M%3A%S'`&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
+}
+
+post_to_devicehub() #Usage: post_to_devicehub_rpi "[sensor_key]" e.g. 6062/device/f41c2cd1-a05e-462e-b674-4b00b8addc4c/sensor/CPU_Temperature [value]
+{
+	sensor_key=$1
+	value=$2
+	curl -k -H "X-ApiKey: 94b66098-a1b2-4295-856f-0f2ee4810747" -H "Content-Type: application/json" -i "https://api.devicehub.net/v2/project/$sensor_key/data" -d '{"value":'$value'}'
 }
 
 #Time check
@@ -76,6 +95,14 @@ post_to_wsncloud $sensor_id_LOADAVG $LOADAVG
 post_to_wsncloud $sensor_id_LoadCycleCount $LoadCycleCount
 post_to_wsncloud $sensor_id_Power_On_Hours $Power_On_Hours
 post_to_wsncloud $sensor_id_Power_Cycle_Count $Power_Cycle_Count
+
+post_to_devicehub $sensor_key_PCBTEMP $PCBTEMP
+post_to_devicehub $sensor_key_DISKTEMP $DISKTEMP
+post_to_devicehub $sensor_key_FANSPEED $FANSPEED
+post_to_devicehub $sensor_key_LOADAVG $LOADAVG
+post_to_devicehub $sensor_key_LoadCycleCount $LoadCycleCount
+post_to_devicehub $sensor_key_Power_On_Hours $Power_On_Hours
+post_to_devicehub $sensor_key_Power_Cycle_Count $Power_Cycle_Count
 
 
 
