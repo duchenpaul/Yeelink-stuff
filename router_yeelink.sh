@@ -35,8 +35,6 @@ post_to_wsncloud() #Usage: post_to_wsncloud sensor_id value
 	curl -v --request POST "http://www.wsncloud.com/api/data/v1/numerical/insert?timestamp=&ak=52596388390a355aa1e90d4076d26d2d&id=$sensor_id&value=$value"
 }
 
-while [ 1 ];do
-
 #Time check
 YEAR_CHK=`date |cut -d ' ' -f 6`
 while [ $YEAR_CHK -lt 2014 ]; do
@@ -80,9 +78,6 @@ post_to_wsncloud $sensor_id_Power_On_Hours $Power_On_Hours
 post_to_wsncloud $sensor_id_Power_Cycle_Count $Power_Cycle_Count
 
 
-
-sleep 565
-done
 
 
 # ======================================================================================================================================================
@@ -147,4 +142,6 @@ done
 # vi /etc/rc.local
 # cp /userdisk/data/router_yeelink.sh /tmp
 # chmod a+x /tmp/router_yeelink.sh
-# sh /tmp/router_yeelink.sh &
+
+#in crontab add
+#*/5 * * * * sh /tmp/router_yeelink.sh >/dev/null 2>&1
